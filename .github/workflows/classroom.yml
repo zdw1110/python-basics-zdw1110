@@ -1,0 +1,120 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Name validation
+      id: name-validation
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Name validation
+        setup-command: pip install pytest
+        command: python -m unittest graded_ex1_test.TestShoppingProgram.test_name_validation
+        timeout: 3
+        max-score: 1
+    - name: Email validation
+      id: email-validation
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Email validation
+        setup-command: pip install pytest
+        command: python -m unittest graded_ex1_test.TestShoppingProgram.test_email_validation
+        timeout: 3
+        max-score: 1
+    - name: Test invalid category
+      id: test-invalid-category
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test invalid category
+        setup-command: pip install pytest
+        command: python -m unittest graded_ex1_test.TestShoppingProgram.test_invalid_category_selection
+        timeout: 3
+        max-score: 1
+    - name: Test valid product selection
+      id: test-valid-product-selection
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test valid product selection
+        setup-command: pip install pytest
+        command: python -m unittest graded_ex1_test.TestShoppingProgram.test_valid_product_selection
+        timeout: 3
+        max-score: 1
+    - name: Test invalid product selection
+      id: test-invalid-product-selection
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test invalid product selection
+        setup-command: pip install pytest
+        command: python -m unittest graded_ex1_test.TestShoppingProgram.test_invalid_product_selection
+        timeout: 3
+        max-score: 1
+    - name: Test sort ascending
+      id: test-sort-ascending
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test sort ascending
+        setup-command: pip install pytest
+        command: "#python -m unittest graded_ex1_test.TestShoppingProgram.test_sort_ascending"
+        timeout: 3
+        max-score: 1
+    - name: Test sort descending
+      id: test-sort-descending
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test sort descending
+        setup-command: pip install pytest
+        command: python -m unittest graded_ex1_test.TestShoppingProgram.test_sort_ascending
+        timeout: 3
+        max-score: 1
+    - name: Test add to cart
+      id: test-add-to-cart
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test add to cart
+        setup-command: pip install pytest
+        command: python -m unittest graded_ex1_test.TestShoppingProgram.test_add_to_cart
+        timeout: 3
+        max-score: 1
+    - name: Test display cart
+      id: test-display-cart
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test display cart
+        setup-command: pip install pytest
+        command: python -m unittest graded_ex1_test.TestShoppingProgram.test_display_cart
+        timeout: 3
+        max-score: 1
+    - name: Test invalid category selection
+      id: test-invalid-category-selection
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test invalid category selection
+        setup-command: pip install pytest
+        command: python -m unittest graded_ex1_test.TestShoppingProgram.test_invalid_category_selection
+        timeout: 3
+        max-score: 1
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        NAME-VALIDATION_RESULTS: "${{steps.name-validation.outputs.result}}"
+        EMAIL-VALIDATION_RESULTS: "${{steps.email-validation.outputs.result}}"
+        TEST-INVALID-CATEGORY_RESULTS: "${{steps.test-invalid-category.outputs.result}}"
+        TEST-VALID-PRODUCT-SELECTION_RESULTS: "${{steps.test-valid-product-selection.outputs.result}}"
+        TEST-INVALID-PRODUCT-SELECTION_RESULTS: "${{steps.test-invalid-product-selection.outputs.result}}"
+        TEST-SORT-ASCENDING_RESULTS: "${{steps.test-sort-ascending.outputs.result}}"
+        TEST-SORT-DESCENDING_RESULTS: "${{steps.test-sort-descending.outputs.result}}"
+        TEST-ADD-TO-CART_RESULTS: "${{steps.test-add-to-cart.outputs.result}}"
+        TEST-DISPLAY-CART_RESULTS: "${{steps.test-display-cart.outputs.result}}"
+        TEST-INVALID-CATEGORY-SELECTION_RESULTS: "${{steps.test-invalid-category-selection.outputs.result}}"
+      with:
+        runners: name-validation,email-validation,test-invalid-category,test-valid-product-selection,test-invalid-product-selection,test-sort-ascending,test-sort-descending,test-add-to-cart,test-display-cart,test-invalid-category-selection
